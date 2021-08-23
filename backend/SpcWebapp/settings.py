@@ -32,8 +32,7 @@ TIMEZONE = None
 # Application definition
 
 INSTALLED_APPS = [
-    'workshop.apps.workshopConfig',
-    'warehouse.apps.warehouseConfig', # todo:enable this
+    'warehouse.apps.warehouseConfig',
     'user.apps.UserConfig',
     'django.contrib.admin',
     'django.contrib.auth',

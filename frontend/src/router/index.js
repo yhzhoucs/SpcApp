@@ -8,11 +8,6 @@ export const constantRouterMap = [
     path: '/login',
     name: 'Login',
     component: () => import('@/views/common/Login')
-  },
-  {
-    path: '/test',
-    name: 'Test',
-    component: () => import('@/views/warehouse/ControlGraph')
   }
 ]
 
@@ -26,77 +21,6 @@ export const asyncRouterMap = [
     name: 'Home',
     component: () => import('@/views/Home'),
     children: [
-      {
-        path: 'controlGraph/:proIndex/:parIndex',
-        component: () => import('@/views/workshop/ControlGraph'),
-        meta: {
-          role: ['admin', 'super_editor', 'viewer'],
-          isSidebarItem: false,
-          subsystem: 'workshop'
-        }
-      },
-      {
-        path: 'productManager',
-        component: () => import('@/views/workshop/ProductManager'),
-        meta: {
-          role: ['admin', 'super_editor'],
-          isSidebarItem: true,
-          subsystem: 'workshop',
-          sidebarInfo: {
-            name: '零件管理',
-            iconClass: 'icon-plus-circle'
-          }
-        }
-      },
-      {
-        path: 'workshopManager',
-        component: () => import('@/views/workshop/WorkshopManager'),
-        meta: {
-          role: ['admin', 'super_editor'],
-          isSidebarItem: true,
-          subsystem: 'workshop',
-          sidebarInfo: {
-            name: '车间管理',
-            iconClass: 'icon-archive1'
-          }
-        }
-      },
-      {
-        path: 'analysisReports',
-        component: () => import('@/views/workshop/AnalysisReports'),
-        meta: {
-          role: ['admin', 'super_editor', 'viewer'],
-          isSidebarItem: true,
-          subsystem: 'workshop',
-          sidebarInfo: {
-            name: '异常警报',
-            iconClass: 'icon-bell'
-          }
-        }
-      },
-      {
-        path: 'UserManage',
-        component: () => import('@/views/workshop/UserManage'),
-        meta: {
-          role: ['admin', 'super_editor',],
-          isSidebarItem: true,
-          subsystem: 'workshop',
-          sidebarInfo: {
-            name: '用户管理',
-            iconClass: 'icon-grid'
-          }
-        }
-      },
-      {
-        path: 'analysisReportDetail/:index',
-        name: 'ReportDetail',
-        component: () => import('@/views/workshop/AnalysisReportDetail'),
-        meta: {
-          role: ['admin', 'super_editor', 'viewer'],
-          isSidebarItem: false,
-          subsystem: 'workshop'
-        }
-      },
       {
         path: 'kanban',
         name: 'Kanban',

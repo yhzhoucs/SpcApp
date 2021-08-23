@@ -3,7 +3,7 @@ from warehouse.util.dataUpload import *
 import random
 import time
 
-from workshop.util.utils import WIDTH
+from warehouse.util.utils import WIDTH
 
 SIGMASCALE = 1
 INTERVAL = 2

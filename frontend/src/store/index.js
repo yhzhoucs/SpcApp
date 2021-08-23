@@ -3,8 +3,6 @@ import Vuex from 'vuex';
 // M#1 import createPersistedState from "vuex-persistedstate";
 
 import user from './modules/user'
-import products from "./modules/products";
-import exceptions from "./modules/exceptions";
 import permission from "./modules/permission";
 import subsystem_state from "./modules/subsystem_state";
 import warehouse_products from "./modules/warehouse_products";
@@ -32,8 +30,6 @@ const userState = new createPersistedState({
 const store = new Vuex.Store({
     modules: {
         user,
-        products,
-        exceptions,
         permission,
         subsystem_state,
         warehouse_products

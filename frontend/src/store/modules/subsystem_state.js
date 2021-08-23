@@ -1,5 +1,5 @@
 const state = () => ({
-    sub_sys: "workshop"
+    sub_sys: "warehouse"
 })
 
 const mutations = {

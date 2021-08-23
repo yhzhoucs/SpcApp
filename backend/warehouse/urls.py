@@ -1,9 +1,15 @@
 from django.urls import include, path
 from django.shortcuts import render
-from workshop.util.graphCheck import getGraph
 from django.http.response import JsonResponse
 from django.http.request import HttpRequest
 from warehouse.util.interface import *
+from warehouse.util.opcua import UaClient
+while True:
+    try:
+        client = UaClient('Warehouse')
+        break
+    except:
+        pass
 
 def get_graph(request): # 这个用于测试, 无实际意义
     data = getGraph('00000000003','00000000003')
