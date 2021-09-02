@@ -69,7 +69,7 @@
     affairs: [
         {
             time: "The time when the event occurred",  // 事件发生的时间
-            type: "sotre | deliver",  // 事件类型
+            type: "store | deliver",  // 事件类型
             // 只有两个取值1. store代表入库 2. deliver代表出库
             detail: "detail of the event"  // 事件的详情
             // 形式：[入库|出库] $零件 $型号 * $数量 个 总价 $价格 元
