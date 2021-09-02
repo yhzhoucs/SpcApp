@@ -1,11 +1,15 @@
+<!--
+Revision:
+2021/9/2: 删除顶部时间段选择栏；出入库动态分开显示
+-->
 <template>
   <div class="main-container">
     <div class="page-header">
       <ol class="breadcrumb">
         <li class="breadcrumb-item">欢迎, {{ currentUser.username }}</li>
       </ol>
+      <!-- Deleted 2021/9/2
       <div class="app-actions">
-        <!--        <button type="button" :class='periodTime === "today"?TAG_ACTIVE:TAG_SHUT' @click='changePeriod("today")'>今天</button>-->
         <button type="button" :class='periodTime === "7days"?TAG_ACTIVE:TAG_SHUT' @click='changePeriod("7days")'>近7天
         </button>
         <button type="button" :class='periodTime === "15days"?TAG_ACTIVE:TAG_SHUT' @click='changePeriod("15days")'>
@@ -17,6 +21,7 @@
         <button type="button" :class='periodTime === "1year"?TAG_ACTIVE:TAG_SHUT' @click='changePeriod("1year")'>近1年
         </button>
       </div>
+      -->
     </div>
     <div class="row gutters">
       <div class="col-xl-3 col-lg-6 col-md-6 col-sm-6 col-12">
@@ -101,7 +106,10 @@
               </div>
               <div class="col-xl-2 col-lg-3 col-md-12 col-sm-12 col-12">
                 <div class="monthly-avg">
+                  <!-- Deleted 2021/9/2
                   <h5>{{ period_for_show }}</h5>
+                  -->
+                  <h5>金额</h5>
                   <div class="avg-block">
                     <h3 class="avg-total text-info">{{ basicInfo.storeMoney }}</h3>
                     <h6 class="avg-label">入库总金额</h6>
@@ -131,15 +139,19 @@
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
           <div class="card-header">
-            <div class="card-title">动态</div>
+            <div class="card-title">入库动态</div>
           </div>
           <div class="card-body">
             <ul class="team-activity">
-              <li class="product-list clearfix" v-for="(affair, k) in affairs" :key="k">
+              <li class="product-list clearfix" v-for="(affair, k) in affairs.store" :key="k">
                 <div class="product-time">
                   <p class="date center-text">{{ affair.time }}</p>
+                  <!-- Deleted 2021/9/2
                   <span :class='["badge", affair.type === "store"?"badge-info":"badge-success"]'>
                     {{ affair.type === "store" ? "入库" : "出库" }}
+                  -->
+                  <span class="badge badge-info">
+                    入库
                   </span>
                 </div>
                 <div class="product-info">
@@ -153,6 +165,33 @@
           </div>
         </div>
       </div>
+      <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">出库动态</div>
+          </div>
+          <div class="card-body">
+            <ul class="team-activity">
+              <li class="product-list clearfix" v-for="(affair, k) in affairs.deliver" :key="k">
+                <div class="product-time">
+                  <p class="date center-text">{{ affair.time }}</p>
+                  <span class="badge badge-success">
+                    出库
+                  </span>
+                </div>
+                <div class="product-info">
+                  <div class="activity">
+                    <h6>{{ affair.detail }}</h6>
+                    <p>{{ affair.operator }}</p>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Deleted 2021/9/2
       <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12 col-12">
         <div class="card">
           <div class="card-header">
@@ -183,6 +222,7 @@
           </div>
         </div>
       </div>
+      -->
     </div>
   </div>
 </template>
@@ -213,7 +253,10 @@ export default {
       todayShippingGraph: null,
 
       periodTime: "7days",
-      affairs: []
+      affairs: {
+        store: [],
+        deliver: []
+      }
     }
   },
   computed: {
@@ -232,6 +275,7 @@ export default {
     }
   },
   methods: {
+    /* Deleted 2021/9/2
     changePeriod: function (p) {
       this.periodTime = p
       // Fetch information of the period
@@ -241,6 +285,7 @@ export default {
         info.occupationStateGraphOption && this.occupationStateGraph.setOption(info.occupationStateGraphOption, true)
       })
     },
+     */
     _dataFormatter(obj) {
       // Generate a sequence of numbers
       let pList = Array.from({length: 31}, (v, i) => i + 1)
@@ -313,7 +358,7 @@ export default {
             // loop: false,
             autoPlay: true,
             // currentIndex: 2,
-            playInterval: 1000,
+            playInterval: 2000,
             // controlStyle: {
             //     position: 'left'
             // },
@@ -472,7 +517,14 @@ export default {
       info.occupationStateGraphOption && this.occupationStateGraph.setOption(info.occupationStateGraphOption, true)
     })
     // Fetch notifications of the warehouse
-    WarehouseApi.getWarehouseAffairs(affairs => this.affairs = affairs)
+    WarehouseApi.getWarehouseAffairs(affairs => {
+      affairs.forEach(affair => {
+        if (affair.type === 'store')
+          this.affairs.store.push(affair)
+        else
+          this.affairs.deliver.push(affair)
+      })
+    })
     // Fetch today's statistics
     WarehouseApi.getTodayStatistics(
         statistics => {
@@ -489,11 +541,10 @@ export default {
         err => console.log(err)
     )
 
-    /* Unused mocking data
-
-    let tmp = [['产品一', 10], ['产品二', 20], ['产品三', 30], ['产品四', 40], ['产品五', 40]]
+    /* Unused mock data
+    let tmp = [['M2螺丝', 10], ['平爆膨胀螺栓', 20], ['十字槽沉头自攻钉', 30], ['开口圆头铆钉', 40], ['封闭沉头铆钉', 40]]
     this.todayPutInGraph.setOption(this.dataToOptionForToday(tmp, 0))
-    tmp = [['产品一', 20], ['产品二', 50], ['产品三', 70], ['产品四', 70], ['产品五', 70]]
+    tmp = [['吊环螺栓', 20], ['特制焊接螺母', 30], ['开口销', 40], ['外六角螺栓12.9级', 40], ['六角柱（碳钢）', 70]]
     this.todayShippingGraph.setOption(this.dataToOptionForToday(tmp, 1))
     const d = {
       putInData: {},
@@ -515,8 +566,8 @@ export default {
       d['shippingData'][m] = arr1
     })
     this.dynamicLineGraph.setOption(this.dataToOptionForDynamic(d), true)
+     */
 
-    */
   }
 }
 </script>
